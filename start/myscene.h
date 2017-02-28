@@ -38,6 +38,8 @@ public:
 
 	void MyScene::mouseClickOnTarget();
 
+	void MyScene::targetSpawnController();
+
 	Target* mouseCol;
 
 private:
@@ -50,6 +52,8 @@ private:
 
 	/// @brief a Timer to rotate the color every n seconds
 	Timer t;
+
+	Timer targetTimer;
 };
 
 #endif /* SCENE00_H */

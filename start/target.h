@@ -9,6 +9,8 @@ public:
 	/// @brief background constructor.
 	Target();
 
+	int xy;
+
 	/// @brief virtual backround deconstructor.
 	virtual ~Target();
 
@@ -16,5 +18,7 @@ public:
 	/// @param deltatime, the time elapsed in seconds.
 	/// @return void
 	virtual void update(float deltaTime);
+
+	bool Target::isCollidingWith(Entity* other);
 
 };

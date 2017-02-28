@@ -14,6 +14,8 @@
 
 MyScene::MyScene() : Scene()
 {
+	targetTimer.start();
+
 	srand(time(NULL));
 
 	//checks if mousebutton 1 is pressed
@@ -54,10 +56,10 @@ MyScene::~MyScene()
 
 void MyScene::update(float deltaTime)
 {
-	for (int i = 0; i < 20; i++) {
+	/*for (int i = 0; i < 20; i++) {
 		targetSpawn();
 		std::cout << "im spawning" << std::endl;
-	}
+	}*/
 
 	//keeps mouse collisiton member on mouse position
 	mouseCol->position = Point2(input()->getMouseX(), input()->getMouseY());
@@ -89,6 +91,7 @@ void MyScene::update(float deltaTime)
 	}
 
 	mouseClickOnTarget();
+	targetSpawnController();
 }
 
 void MyScene::mouseClickOnTarget() {
@@ -107,6 +110,13 @@ void MyScene::mouseClickOnTarget() {
 				it++;
 			}
 		}
+	}
+}
+
+void MyScene::targetSpawnController() {
+	if (targetTimer.seconds() > 2.0f) {
+		targetSpawn();
+		targetTimer.start();
 	}
 }
 
