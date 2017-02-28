@@ -14,6 +14,8 @@
 
 MyScene::MyScene() : Scene()
 {
+	score = 0;
+
 	targetTimer.start();
 
 	srand(time(NULL));
@@ -31,6 +33,11 @@ MyScene::MyScene() : Scene()
 	mouseCol = new Target();
 	mouseCol->scale = Point2(1, 1);
 	this->addChild(mouseCol);
+
+	//score counter
+	scoretext = new Text();
+	this->addChild(scoretext);
+	scoretext->position = Point2(SWIDTH / 2, SHEIGHT / 2);
 
 	// create a single instance of MyEntity in the middle of the screen.
 	// the Sprite is added in Constructor of MyEntity.
@@ -56,10 +63,22 @@ MyScene::~MyScene()
 
 void MyScene::update(float deltaTime)
 {
+
+	//slim shady simulator(uncomment to unlock)
+	//disclamer!
+	//uncommenting this for loop will kill your fps, no matter the system
+
 	/*for (int i = 0; i < 20; i++) {
 		targetSpawn();
 		std::cout << "im spawning" << std::endl;
 	}*/
+
+	//############################################
+	//############################################
+
+	std::stringstream ts;
+	ts << score;
+	scoretext->message(ts.str());
 
 	//keeps mouse collisiton member on mouse position
 	mouseCol->position = Point2(input()->getMouseX(), input()->getMouseY());
@@ -104,6 +123,7 @@ void MyScene::mouseClickOnTarget() {
 				this->removeChild(b);
 				it = targetVector.erase(it);
 				delete b;
+				score += 1;
 			}
 			else
 			{

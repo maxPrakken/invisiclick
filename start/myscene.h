@@ -11,6 +11,8 @@
 
 #include <rt2d/scene.h>
 #include <start\target.h>
+#include <rt2d/text.h>
+
 #include "myentity.h"
 
 /// @brief The MyScene class is the Scene implementation.
@@ -23,6 +25,8 @@ public:
 	virtual ~MyScene();
 
 	int xy;
+
+	int score;
 
 	int targetX;
 	int targetY;
@@ -48,12 +52,12 @@ private:
 	/// @brief the rotating square in the middle of the screen
 	MyEntity* myentity;
 
-	
-
 	/// @brief a Timer to rotate the color every n seconds
 	Timer t;
 
 	Timer targetTimer;
+
+	Text* scoretext;
 };
 
 #endif /* SCENE00_H */
