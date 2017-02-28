@@ -14,6 +14,8 @@
 
 MyScene::MyScene() : Scene()
 {
+	srand(time(NULL));
+
 	//checks if mousebutton 1 is pressed
 	mousepress = false;
 
@@ -33,7 +35,7 @@ MyScene::MyScene() : Scene()
 	myentity = new MyEntity();
 	myentity->position = Point2(SWIDTH/2, SHEIGHT/2);
 
-	targetSpawn(SWIDTH / 2, SHEIGHT / 2);
+	targetSpawn();
 
 	// create the scene 'tree'
 	// add myentity to this Scene as a child.
@@ -52,6 +54,11 @@ MyScene::~MyScene()
 
 void MyScene::update(float deltaTime)
 {
+	for (int i = 0; i < 20; i++) {
+		targetSpawn();
+		std::cout << "im spawning" << std::endl;
+	}
+
 	//keeps mouse collisiton member on mouse position
 	mouseCol->position = Point2(input()->getMouseX(), input()->getMouseY());
 
@@ -89,7 +96,6 @@ void MyScene::mouseClickOnTarget() {
 	std::vector<Target*>::iterator it = targetVector.begin();
 	while (it != targetVector.end())
 	{
-		
 			if (mouseCol->isCollidingWith((*it))) {
 				Target* b = (*it);
 				this->removeChild(b);
@@ -104,20 +110,18 @@ void MyScene::mouseClickOnTarget() {
 	}
 }
 
-void MyScene::targetSpawn(int x, int y) {
-	srand(time(0));
+void MyScene::targetSpawn() {
+
+	int targetX = rand() % 1500;
+	int targetY = rand() % 800 + 50;
+
 	Target* target1 = new Target();
-	target1->position = Point2(x, y);
-	//targetSizeXY();
+	target1->position = Point2(targetX, targetY);
 	xy = rand() % 10;
 	std::cout << "the random number is: " << xy << std::endl;
 	target1->scale = Point2(xy, xy);
 	addChild(target1);
 	targetVector.push_back(target1);
+	std::cout << "my X position is " << targetX << std::endl;
 }
-
-/*int MyScene::targetSizeXY() {
-	xy = rand() % 10;
-	return xy;
-}*/
 

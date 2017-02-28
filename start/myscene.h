@@ -24,6 +24,9 @@ public:
 
 	int xy;
 
+	int targetX;
+	int targetY;
+
 	bool mousepress;
 
 	/// @brief update is automatically called every frame
@@ -31,7 +34,7 @@ public:
 	/// @return void
 	virtual void update(float deltaTime);
 
-	void MyScene::targetSpawn(int x, int y);
+	void MyScene::targetSpawn();
 
 	void MyScene::mouseClickOnTarget();
 
