@@ -24,8 +24,7 @@ public:
 
 	int xy;
 
-	float mousex;
-	float mousey;
+	bool mousepress;
 
 	/// @brief update is automatically called every frame
 	/// @param deltaTime the elapsed time in seconds
@@ -34,13 +33,17 @@ public:
 
 	void MyScene::targetSpawn(int x, int y);
 
+	void MyScene::mouseClickOnTarget();
+
+	Target* mouseCol;
+
 private:
 	std::vector<Target*>targetVector;
 
 	/// @brief the rotating square in the middle of the screen
 	MyEntity* myentity;
 
-	Target* mouseCol;
+	
 
 	/// @brief a Timer to rotate the color every n seconds
 	Timer t;

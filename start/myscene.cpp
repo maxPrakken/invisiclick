@@ -10,11 +10,15 @@
 #include "myscene.h"
 #include "target.h"
 #include "entitymain.h"
+#include "input.h"
 
 MyScene::MyScene() : Scene()
 {
+	//checks if mousebutton 1 is pressed
+	mousepress = false;
+
 	//renders the mouse
-	rendermouse = true;
+	rendermouse = false;
 
 	// start the timer.
 	t.start();
@@ -75,6 +79,28 @@ void MyScene::update(float deltaTime)
 		RGBAColor color = myentity->sprite()->color;
 		myentity->sprite()->color = Color::rotate(color, 0.01f);
 		t.start();
+	}
+
+	mouseClickOnTarget();
+}
+
+void MyScene::mouseClickOnTarget() {
+	if (input()->getMouseDown(GLFW_MOUSE_BUTTON_1)) {
+	std::vector<Target*>::iterator it = targetVector.begin();
+	while (it != targetVector.end())
+	{
+		
+			if (mouseCol->isCollidingWith((*it))) {
+				Target* b = (*it);
+				this->removeChild(b);
+				it = targetVector.erase(it);
+				delete b;
+			}
+			else
+			{
+				it++;
+			}
+		}
 	}
 }
 
