@@ -11,6 +11,7 @@
 #include "target.h"
 #include "entitymain.h"
 #include "input.h"
+#include "ping.h"
 
 MyScene::MyScene() : Scene()
 {
@@ -20,11 +21,8 @@ MyScene::MyScene() : Scene()
 
 	srand(time(NULL));
 
-	//checks if mousebutton 1 is pressed
-	mousepress = false;
-
 	//renders the mouse
-	rendermouse = false;
+	rendermouse = true;
 
 	// start the timer.
 	t.start();
@@ -79,6 +77,10 @@ void MyScene::update(float deltaTime)
 	//############################################
 	//############################################
 
+	if (input()->getMouseDown(GLFW_MOUSE_BUTTON_1)) {
+		pingSpawn();
+	}
+
 	std::stringstream ts;
 	ts << score;
 	scoretext->message(ts.str());
@@ -114,6 +116,13 @@ void MyScene::update(float deltaTime)
 
 	mouseClickOnTarget();
 	targetSpawnController();
+}
+
+void MyScene::pingSpawn() {
+	Ping* ping = new Ping();
+	ping->position = Point2(input()->getMouseX(), input()->getMouseY());
+	this->addChild(ping);
+	pingVector.push_back(ping);
 }
 
 void MyScene::mouseClickOnTarget() {

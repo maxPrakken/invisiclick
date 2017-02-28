@@ -14,6 +14,7 @@
 #include <rt2d/text.h>
 
 #include "myentity.h"
+#include "ping.h"
 
 /// @brief The MyScene class is the Scene implementation.
 class MyScene : public Scene
@@ -31,7 +32,6 @@ public:
 	int targetX;
 	int targetY;
 
-	bool mousepress;
 
 	/// @brief update is automatically called every frame
 	/// @param deltaTime the elapsed time in seconds
@@ -44,10 +44,14 @@ public:
 
 	void MyScene::targetSpawnController();
 
+	void MyScene::pingSpawn();
+
 	Target* mouseCol;
 
 private:
 	std::vector<Target*>targetVector;
+
+	std::vector<Ping*>pingVector;
 
 	/// @brief the rotating square in the middle of the screen
 	MyEntity* myentity;

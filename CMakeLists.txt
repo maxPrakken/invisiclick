@@ -160,6 +160,8 @@ IF(MAKE_START)
 		start/target.h
 		start/entitymain.cpp
 		start/entitymain.h
+		start/ping.cpp
+		start/ping.h
 	)
 	target_link_libraries(start
 		${ALL_GRAPHICS_LIBS}
