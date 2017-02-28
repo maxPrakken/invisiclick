@@ -19,6 +19,11 @@ MyScene::MyScene() : Scene()
 	// start the timer.
 	t.start();
 
+	//mouse collision checker
+	mouseCol = new Target();
+	mouseCol->scale = Point2(1, 1);
+	this->addChild(mouseCol);
+
 	// create a single instance of MyEntity in the middle of the screen.
 	// the Sprite is added in Constructor of MyEntity.
 	myentity = new MyEntity();
@@ -43,10 +48,8 @@ MyScene::~MyScene()
 
 void MyScene::update(float deltaTime)
 {
-	/*
-	xy = rand() % 10;
-	std::cout << xy << std::endl;
-	*/ 
+	//keeps mouse collisiton member on mouse position
+	mouseCol->position = Point2(input()->getMouseX(), input()->getMouseY());
 
 	// ###############################################################
 	// Escape key stops the Scene
