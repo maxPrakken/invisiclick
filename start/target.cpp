@@ -3,6 +3,9 @@
 Target::Target() : EntityMain()
 {
 	this->addSprite("assets/slimshady.tga");
+	xy = rand() % 10;
+	std::cout << "the random number is: " << xy << std::endl;
+	this->scale = Point2(xy, xy);
 }
 
 

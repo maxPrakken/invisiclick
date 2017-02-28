@@ -127,9 +127,6 @@ void MyScene::targetSpawn() {
 
 	Target* target1 = new Target();
 	target1->position = Point2(targetX, targetY);
-	xy = rand() % 10;
-	std::cout << "the random number is: " << xy << std::endl;
-	target1->scale = Point2(xy, xy);
 	addChild(target1);
 	targetVector.push_back(target1);
 	std::cout << "my X position is " << targetX << std::endl;
