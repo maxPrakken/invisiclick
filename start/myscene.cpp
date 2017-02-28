@@ -30,9 +30,12 @@ MyScene::MyScene() : Scene()
 	t.start();
 
 	//mouse collision checker
+	//colColor makes collision checker invisible
 	mouseCol = new Target();
 	mouseCol->scale = Point2(1, 1);
 	this->addChild(mouseCol);
+	RGBAColor colColor(255, 255, 255, 0);
+	mouseCol->sprite()->color = colColor;
 
 	//score counter
 	scoretext = new Text();
