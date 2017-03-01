@@ -31,6 +31,8 @@ public:
 
 	int score;
 
+	int lives;
+
 	int targetX;
 	int targetY;
 
@@ -67,7 +69,10 @@ private:
 	Timer startTimer;
 
 	Text* scoretext;
+	Text* beforescoretext;
 	Text* starttext;
+	Text* livestext;
+	Text* beforelivestext;
 };
 
 #endif /* SCENE00_H */

@@ -17,7 +17,7 @@ void Ping::update(float deltaTime)
 		alpha -= 200 * deltaTime;
 		RGBAColor pingColor(0, 0, 255, (int)alpha);
 		this->sprite()->color = pingColor;
-		std::cout << alpha << std::endl;
+		//std::cout << alpha << std::endl;
 	}
 	else if (alpha <= 0) {
 		RGBAColor pingColor(0, 0, 0, 0);

@@ -15,6 +15,8 @@
 
 MyScene::MyScene() : Scene()
 {
+	lives = 3;
+	
 	score = 0;
 
 	targetTimer.start();
@@ -43,19 +45,32 @@ MyScene::MyScene() : Scene()
 	//score counter
 	scoretext = new Text();
 	this->addChild(scoretext);
-	scoretext->position = Point2(100, 100);
+	scoretext->position = Point2(320, 100);
+
+	//before score counter
+	beforescoretext = new Text();
+	this->addChild(beforescoretext);
+	beforescoretext->position = Point2(100, 100);
 
 	//start counter
 	starttext = new Text();
 	this->addChild(starttext);
 	starttext->position = Point2(SWIDTH / 2, SHEIGHT / 2);
 
+	//lives text
+	livestext = new Text();
+	this->addChild(livestext);
+	livestext->position = Point2(1820, 100);
+
+	//text before the lives counter
+	beforelivestext = new Text();
+	this->addChild(beforelivestext);
+	beforelivestext->position = Point2(1600, 100);
+
 	// create a single instance of MyEntity in the middle of the screen.
 	// the Sprite is added in Constructor of MyEntity.
 	myentity = new MyEntity();
 	myentity->position = Point2(SWIDTH/2, SHEIGHT/2);
-
-	targetSpawn();
 
 	// create the scene 'tree'
 	// add myentity to this Scene as a child.
@@ -102,7 +117,21 @@ void MyScene::update(float deltaTime)
 	}
 	else if (countdowntime <= 0) {
 		this->removeChild(starttext);
+		rendermouse = false;
 	}
+
+	//before score count
+	std::stringstream rs;
+	beforescoretext->message("score:");
+
+	//lives 
+	std::stringstream ls;
+	ls << lives;
+	livestext->message(ls.str());
+
+	//text before lives
+	std::stringstream bs;
+	beforelivestext->message("lives:");
 
 	//start countdown
 	std::stringstream st;
@@ -151,7 +180,6 @@ void MyScene::pingSpawn() {
 }
 
 void MyScene::pingDespawn() {
-
 	std::vector<Ping*>::iterator it = pingVector.begin();
 	while (it != pingVector.end()) {
 		if ((*it)->alpha < 0) {
@@ -159,7 +187,7 @@ void MyScene::pingDespawn() {
 			this->removeChild(p);
 			it = pingVector.erase(it);
 			delete p;
-			std::cout << "im despawning" << std::endl;
+			//std::cout << "im despawning" << std::endl;
 		}
 		else {
 			it++;
@@ -169,20 +197,26 @@ void MyScene::pingDespawn() {
 
 void MyScene::mouseClickOnTarget() {
 	if (input()->getMouseDown(GLFW_MOUSE_BUTTON_1)) {
-	std::vector<Target*>::iterator it = targetVector.begin();
-	while (it != targetVector.end())
-	{
+		int count = 0;
+		std::vector<Target*>::iterator it = targetVector.begin();
+		while (it != targetVector.end()) {
 			if (mouseCol->isCollidingWith((*it))) {
 				Target* b = (*it);
 				this->removeChild(b);
 				it = targetVector.erase(it);
 				delete b;
 				score += 1;
+				count++;
+				return;
 			}
 			else
 			{
 				it++;
 			}
+		}
+		if (count == 0) {
+			lives -= 1;
+			std::cout << "i have " << lives << " lives left" << std::endl;
 		}
 	}
 }
@@ -203,6 +237,6 @@ void MyScene::targetSpawn() {
 	target1->position = Point2(targetX, targetY);
 	targetVector.push_back(target1);
 	addChild(target1);
-	std::cout << "my X position is " << targetX << std::endl;
+	//std::cout << "my X position is " << targetX << std::endl;
 }
 
