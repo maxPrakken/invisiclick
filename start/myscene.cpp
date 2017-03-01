@@ -19,6 +19,8 @@ MyScene::MyScene() : Scene()
 
 	targetTimer.start();
 
+	countdowntime = 3;
+
 	srand(time(NULL));
 
 	//renders the mouse
@@ -26,6 +28,9 @@ MyScene::MyScene() : Scene()
 
 	// start the timer.
 	t.start();
+
+	//start countdown timer
+	startTimer.start();
 
 	//mouse collision checker
 	//colColor makes collision checker invisible
@@ -38,7 +43,12 @@ MyScene::MyScene() : Scene()
 	//score counter
 	scoretext = new Text();
 	this->addChild(scoretext);
-	scoretext->position = Point2(SWIDTH / 2, SHEIGHT / 2);
+	scoretext->position = Point2(100, 100);
+
+	//start counter
+	starttext = new Text();
+	this->addChild(starttext);
+	starttext->position = Point2(SWIDTH / 2, SHEIGHT / 2);
 
 	// create a single instance of MyEntity in the middle of the screen.
 	// the Sprite is added in Constructor of MyEntity.
@@ -81,9 +91,23 @@ void MyScene::update(float deltaTime)
 		pingSpawn();
 	}
 
+	//score 
 	std::stringstream ts;
 	ts << score;
 	scoretext->message(ts.str());
+
+	if (startTimer.seconds() >= 1 && countdowntime >= 0) {
+		countdowntime--;
+		startTimer.start();
+	}
+	else if (countdowntime <= 0) {
+		this->removeChild(starttext);
+	}
+
+	//start countdown
+	std::stringstream st;
+	st << countdowntime;
+	starttext->message(st.str());
 
 	//keeps mouse collisiton member on mouse position
 	mouseCol->position = Point2(input()->getMouseX(), input()->getMouseY());
@@ -164,7 +188,7 @@ void MyScene::mouseClickOnTarget() {
 }
 
 void MyScene::targetSpawnController() {
-	if (targetTimer.seconds() > 2.0f) {
+	if (targetTimer.seconds() > 1.0f) {
 		targetSpawn();
 		targetTimer.start();
 	}
@@ -177,8 +201,8 @@ void MyScene::targetSpawn() {
 
 	Target* target1 = new Target();
 	target1->position = Point2(targetX, targetY);
-	addChild(target1);
 	targetVector.push_back(target1);
+	addChild(target1);
 	std::cout << "my X position is " << targetX << std::endl;
 }
 

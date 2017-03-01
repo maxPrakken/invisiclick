@@ -27,6 +27,8 @@ public:
 
 	int xy;
 
+	int countdowntime;
+
 	int score;
 
 	int targetX;
@@ -62,7 +64,10 @@ private:
 
 	Timer targetTimer;
 
+	Timer startTimer;
+
 	Text* scoretext;
+	Text* starttext;
 };
 
 #endif /* SCENE00_H */
