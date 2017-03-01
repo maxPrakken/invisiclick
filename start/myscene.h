@@ -51,6 +51,10 @@ public:
 
 	void MyScene::pingSpawn();
 
+	void MyScene::startgame();
+
+	void MyScene::cleanse();
+
 	Target* mouseCol;
 
 private:
@@ -73,6 +77,7 @@ private:
 	Text* starttext;
 	Text* livestext;
 	Text* beforelivestext;
+	Text* restarttext;
 };
 
 #endif /* SCENE00_H */

@@ -15,8 +15,158 @@
 
 MyScene::MyScene() : Scene()
 {
+	startgame();
+}
+
+
+MyScene::~MyScene()
+{
+	cleanse();
+}
+
+void MyScene::update(float deltaTime)
+{
+
+	//slim shady simulator(uncomment to unlock)
+	//disclamer!
+	//uncommenting this for loop will kill your fps, no matter the system
+
+	/*for (int i = 0; i < 20; i++) {
+		targetSpawn();
+		std::cout << "im spawning" << std::endl;
+	}*/
+
+	//############################################
+	//############################################
+
+	//deals with restart of the game
+	if (lives <= 0) {
+		lives = 0;
+		std::stringstream ls;
+		ls << lives;
+		livestext->message(ls.str());
+
+		this->addChild(restarttext);
+
+		if (input()->getKeyDown(GLFW_KEY_R)) {
+			cleanse();
+			startgame();
+		}
+	}
+	else {
+
+		//score 
+		std::stringstream ts;
+		ts << score;
+		scoretext->message(ts.str());
+
+		if (startTimer.seconds() >= 1 && countdowntime >= 0) {
+			rendermouse = true;
+			countdowntime--;
+			startTimer.start();
+		}
+		else if (countdowntime <= 0) {
+			this->removeChild(starttext);
+			rendermouse = false;
+		}
+
+		std::cout << rendermouse << std::endl;
+
+		//before score count
+		std::stringstream rs;
+		beforescoretext->message("score:");
+
+		//lives 
+		std::stringstream ls;
+		ls << lives;
+		livestext->message(ls.str());
+
+		//text before lives
+		std::stringstream bs;
+		beforelivestext->message("lives:");
+
+		//start countdown
+		std::stringstream st;
+		st << countdowntime;
+		starttext->message(st.str());
+
+		//keeps mouse collisiton member on mouse position
+		mouseCol->position = Point2(input()->getMouseX(), input()->getMouseY());
+
+		// ###############################################################
+		// Escape key stops the Scene
+		// ###############################################################
+		if (input()->getKeyUp(GLFW_KEY_ESCAPE)) {
+			this->stop();
+		}
+
+		// ###############################################################
+		// Spacebar scales myentity
+		// ###############################################################
+		if (input()->getKeyDown(GLFW_KEY_SPACE)) {
+			myentity->scale = Point(0.5f, 0.5f);
+		}
+		if (input()->getKeyUp(GLFW_KEY_SPACE)) {
+			myentity->scale = Point(1.0f, 1.0f);
+		}
+
+		// ###############################################################
+		// Rotate color
+		// ###############################################################
+		if (t.seconds() > 0.0333f) {
+			RGBAColor color = myentity->sprite()->color;
+			myentity->sprite()->color = Color::rotate(color, 0.01f);
+			t.start();
+		}
+
+		mouseClickOnTarget();
+		targetSpawnController();
+	}
+
+	pingDespawn();
+}
+
+void MyScene::cleanse() {
+	// deconstruct and delete the Tree
+	this->removeChild(myentity);
+	this->removeChild(mouseCol);
+	this->removeChild(scoretext);
+	this->removeChild(beforescoretext);
+	this->removeChild(starttext);
+	this->removeChild(livestext);
+	this->removeChild(beforelivestext);
+	this->removeChild(restarttext);
+
+	// delete myentity from the heap (there was a 'new' in the constructor)
+	delete myentity;
+	delete mouseCol;
+	delete scoretext;
+	delete beforescoretext;
+	delete starttext;
+	delete livestext;
+	delete beforelivestext;
+	delete restarttext;
+
+	//cleanup vectors
+	for (unsigned int i = 0; i < targetVector.size(); i++) {
+		this->removeChild(targetVector[i]);
+		delete targetVector[i];
+	}
+	targetVector.clear();
+
+	for (unsigned int i = 0; i < pingVector.size(); i++) {
+		this->removeChild(pingVector[i]);
+		delete pingVector[i];
+	}
+	pingVector.clear();
+}
+
+void MyScene::startgame() {
 	lives = 3;
-	
+
+	//renders the mouse
+	rendermouse = true;
+
 	score = 0;
 
 	targetTimer.start();
@@ -24,9 +174,6 @@ MyScene::MyScene() : Scene()
 	countdowntime = 3;
 
 	srand(time(NULL));
-
-	//renders the mouse
-	rendermouse = true;
 
 	// start the timer.
 	t.start();
@@ -67,109 +214,20 @@ MyScene::MyScene() : Scene()
 	this->addChild(beforelivestext);
 	beforelivestext->position = Point2(1600, 100);
 
+	//restarttext
+	restarttext = new Text();
+	restarttext->position = Point2(600, SHEIGHT / 2 + 100);
+	std::stringstream rs;
+	restarttext->message("press R to restart the game", RED);
+
 	// create a single instance of MyEntity in the middle of the screen.
 	// the Sprite is added in Constructor of MyEntity.
 	myentity = new MyEntity();
-	myentity->position = Point2(SWIDTH/2, SHEIGHT/2);
+	myentity->position = Point2(SWIDTH / 2, SHEIGHT / 2);
 
 	// create the scene 'tree'
 	// add myentity to this Scene as a child.
 	this->addChild(myentity);
-}
-
-
-MyScene::~MyScene()
-{
-	// deconstruct and delete the Tree
-	this->removeChild(myentity);
-
-	// delete myentity from the heap (there was a 'new' in the constructor)
-	delete myentity;
-}
-
-void MyScene::update(float deltaTime)
-{
-
-	//slim shady simulator(uncomment to unlock)
-	//disclamer!
-	//uncommenting this for loop will kill your fps, no matter the system
-
-	/*for (int i = 0; i < 20; i++) {
-		targetSpawn();
-		std::cout << "im spawning" << std::endl;
-	}*/
-
-	//############################################
-	//############################################
-
-	if (input()->getMouseDown(GLFW_MOUSE_BUTTON_1)) {
-		pingSpawn();
-	}
-
-	//score 
-	std::stringstream ts;
-	ts << score;
-	scoretext->message(ts.str());
-
-	if (startTimer.seconds() >= 1 && countdowntime >= 0) {
-		countdowntime--;
-		startTimer.start();
-	}
-	else if (countdowntime <= 0) {
-		this->removeChild(starttext);
-		rendermouse = false;
-	}
-
-	//before score count
-	std::stringstream rs;
-	beforescoretext->message("score:");
-
-	//lives 
-	std::stringstream ls;
-	ls << lives;
-	livestext->message(ls.str());
-
-	//text before lives
-	std::stringstream bs;
-	beforelivestext->message("lives:");
-
-	//start countdown
-	std::stringstream st;
-	st << countdowntime;
-	starttext->message(st.str());
-
-	//keeps mouse collisiton member on mouse position
-	mouseCol->position = Point2(input()->getMouseX(), input()->getMouseY());
-
-	// ###############################################################
-	// Escape key stops the Scene
-	// ###############################################################
-	if (input()->getKeyUp( GLFW_KEY_ESCAPE )) {
-		this->stop();
-	}
-
-	// ###############################################################
-	// Spacebar scales myentity
-	// ###############################################################
-	if (input()->getKeyDown( GLFW_KEY_SPACE )) {
-		myentity->scale = Point(0.5f, 0.5f);
-	}
-	if (input()->getKeyUp( GLFW_KEY_SPACE )) {
-		myentity->scale = Point(1.0f, 1.0f);
-	}
-
-	// ###############################################################
-	// Rotate color
-	// ###############################################################
-	if (t.seconds() > 0.0333f) {
-		RGBAColor color = myentity->sprite()->color;
-		myentity->sprite()->color = Color::rotate(color, 0.01f);
-		t.start();
-	}
-
-	mouseClickOnTarget();
-	targetSpawnController();
-	pingDespawn();
 }
 
 void MyScene::pingSpawn() {
@@ -197,6 +255,7 @@ void MyScene::pingDespawn() {
 
 void MyScene::mouseClickOnTarget() {
 	if (input()->getMouseDown(GLFW_MOUSE_BUTTON_1)) {
+		pingSpawn();
 		int count = 0;
 		std::vector<Target*>::iterator it = targetVector.begin();
 		while (it != targetVector.end()) {
