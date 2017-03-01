@@ -32,11 +32,12 @@ public:
 	int targetX;
 	int targetY;
 
-
 	/// @brief update is automatically called every frame
 	/// @param deltaTime the elapsed time in seconds
 	/// @return void
 	virtual void update(float deltaTime);
+
+	void MyScene::pingDespawn();
 
 	void MyScene::targetSpawn();
 

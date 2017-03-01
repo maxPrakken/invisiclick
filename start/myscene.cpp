@@ -116,6 +116,7 @@ void MyScene::update(float deltaTime)
 
 	mouseClickOnTarget();
 	targetSpawnController();
+	pingDespawn();
 }
 
 void MyScene::pingSpawn() {
@@ -123,6 +124,23 @@ void MyScene::pingSpawn() {
 	ping->position = Point2(input()->getMouseX(), input()->getMouseY());
 	this->addChild(ping);
 	pingVector.push_back(ping);
+}
+
+void MyScene::pingDespawn() {
+
+	std::vector<Ping*>::iterator it = pingVector.begin();
+	while (it != pingVector.end()) {
+		if ((*it)->alpha < 0) {
+			Ping* p = (*it);
+			this->removeChild(p);
+			it = pingVector.erase(it);
+			delete p;
+			std::cout << "im despawning" << std::endl;
+		}
+		else {
+			it++;
+		}
+	}
 }
 
 void MyScene::mouseClickOnTarget() {
