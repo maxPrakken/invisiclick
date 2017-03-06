@@ -124,6 +124,7 @@ void MyScene::update(float deltaTime)
 	}
 
 	pingDespawn();
+	std::cout << rendermouse << std::endl;
 }
 
 void MyScene::cleanse() {
