@@ -61,7 +61,6 @@ void MyScene::update(float deltaTime)
 		scoretext->message(ts.str());
 
 		if (startTimer.seconds() >= 1 && countdowntime >= 0) {
-			rendermouse = true;
 			countdowntime--;
 			startTimer.start();
 		}
